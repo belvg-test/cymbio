@@ -13,6 +13,38 @@ Create extension according to the  [description](https://docs.google.com/documen
 * create API wrapper (using `Varien_Http_Client`/`Zend_Http_Client`. [cymbio-php-sdk](http://api.cym.bio/v1) uses hardcoded url to the entry point, so does not match staging purposes);
 * send API request, store the response into the log file.
 
+## Working demo
+http://dev2.belvg.net/cymbio/
+
+Additional button is added to the product page. Button label is managed by the layout `setData` action. 
+
+Only the custom button fires API call and cymbio table update. Default add to cart button adds the product, but observer is skipped.
+
+API response is stored into the cymbio-response.log, module errors are logged in cymbio-error.log (see Belvg_Cymbio_Helper_Data).
+
+Module creates `cymbio` table with the foreign key cymbio/product_id - catalog_product_entity/entity_id:
+
+```
+CREATE TABLE `cymbio` (
+  `cymbio_id` int(10) UNSIGNED NOT NULL COMMENT 'Entity Id',
+  `event` varchar(255) DEFAULT NULL COMMENT 'Type of the event',
+  `product_id` int(10) UNSIGNED DEFAULT NULL COMMENT 'ID of the product',
+  `product_price` decimal(12,4) NOT NULL DEFAULT '0.0000' COMMENT 'Price of the product',
+  `product_description` varchar(255) DEFAULT NULL COMMENT 'Product description'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='cymbio';
+
+ALTER TABLE `cymbio`
+  ADD PRIMARY KEY (`cymbio_id`),
+  ADD KEY `FK_CYMBIO_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` (`product_id`);
+
+ALTER TABLE `cymbio`
+  MODIFY `cymbio_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Entity Id';
+
+ALTER TABLE `cymbio`
+  ADD CONSTRAINT `FK_CYMBIO_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE NO ACTION;
+
+```
+
 ## API integration problems
 
 * Staging server requires "Referer" http header in the request (for now the product page URL is sent as the Referer header).
