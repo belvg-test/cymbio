@@ -1,0 +1,10 @@
+<?php
+/**
+ * @see Belvg_Cymbio_Block_Addtocart
+ * @var $this Belvg_Cymbio_Block_Addtocart
+ */
+
+$title = $this->stripTags($this->__($this->getButtonTitle()));
+?>
+<button type="button" title="<?php echo $title ?>" id="custom-addtocart-button" class="button btn-cart" onclick="productAddToCartForm.submitLight(this, '<?php echo $this->getCustomSubmitUrl()?>')"><span><span><?php echo $title ?></span></span></button>
+

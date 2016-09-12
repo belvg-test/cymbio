@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Belvg_Cymbio>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Mage_Downloadable/>
+                <Mage_Sales/>
+                <Mage_Checkout/>
+            </depends>
+        </Belvg_Cymbio>
+    </modules>
+</config>
